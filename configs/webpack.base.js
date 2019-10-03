@@ -34,7 +34,8 @@ module.exports={
         alias:{
           //解析路径
           '@': resolve('src')
-        }
+        },
+        extensions: ['.js', '.json', '.css']
     },
     entry:{
         'common':'./src/js/common.js',
