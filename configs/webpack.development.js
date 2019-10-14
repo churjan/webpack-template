@@ -1,14 +1,24 @@
-const merge = require('webpack-merge');
-const baseConfig = require('./webpack.base.js');
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const baseConfig = require('./webpack.base.js')
 
 const config = merge.smart(baseConfig, {
-    mode:'development',
-    //静态服务器，可以预览打包后的项目
-    devServer:{
-        contentBase:'./dist',
-        host:'localhost',
-        port:8000,
-        compress:true,//服务器返回给浏览器的时候是否启用gzip压缩
-    }
+  mode: 'development',
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+  //静态服务器，可以预览打包后的项目
+  devServer: {
+    contentBase: './dist',
+    open: true,
+    host: 'localhost',
+    port: 8000,
+    hot: true,
+    hotOnly: true
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:3000' //服务器的地址
+    //   }
+    // }
+  }
 })
-module.exports = config;
+module.exports = config

@@ -1,6 +1,10 @@
-body{
-    background-color: green;
-    transform:rotate(20deg);
-    filter: opacity(.5);
-    font-size: 30px;
+body {
+  background-color: green;
+  filter: opacity(0.5);
+  font-size: 40px;
+}
+.avatar {
+  width: 400px;
+  height: 400px;
+  background: url(../images/avatar.jpeg);
 }
