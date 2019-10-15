@@ -37,7 +37,8 @@ module.exports = {
   resolve: {
     alias: {
       //解析路径
-      '@': resolve('src')
+      '@': resolve('src'),
+      '@static': resolve('static')
     },
     extensions: ['.js', '.json', '.css']
   },
