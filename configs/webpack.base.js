@@ -72,7 +72,8 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: process.env.NODE_ENV === 'development'
+              hmr: process.env.NODE_ENV === 'development',
+              publicPath: '../'
             }
           },
           'css-loader',
@@ -113,8 +114,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
+      filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
+      chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css'
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
