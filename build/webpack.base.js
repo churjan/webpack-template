@@ -23,7 +23,7 @@ for (let item of htmlArr) {
     entrys[name] = resolve(`src/js/${name}.js`)
     htmlPlugins.push(
       new HtmlWebpackPlugin({
-        template: resolve(`src/html/${item}`),
+        template: `src/html/${item}`,
         chunks: ['vendor', 'common', name],
         title: name,
         filename: `${item}`,
@@ -49,20 +49,32 @@ module.exports = {
     path: resolve('dist'), //输出的文件夹，只能是绝对路径
     //name是entry名字main,hash根据打包后的文件内容计算出来的hash,默认20位，这里取8位
     // filename:'[name].[hash:8].js'//打包后的文件名
-    filename: 'js/[name].[hash:8].js'
+    filename: devMode ? 'js/[name].js' : 'js/[name].[hash:8].js'
   },
-
+  resolveLoader: {
+    modules: ['node_modules', 'loaders']
+  },
   module: {
     rules: [
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
+        use: [
+          //自定义loader
+          // {
+          //   loader: 'replaceLoader',
+          //   options: {
+          //     name: 'Churjan'
+          //   }
+          // },
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-transform-runtime']
+            }
           }
-        }
+        ]
       },
       {
         //css-loader 用来解析css文件的url解析
@@ -159,18 +171,6 @@ module.exports = {
           minSize: 0,
           priority: 1
         }
-        // vendor: {
-        //   test: /[\\/]node_modules[\\/]/,
-        //   name(module) {
-        //     // get the name. E.g. node_modules/packageName/not/this/part.js
-        //     // or node_modules/packageName
-        //     const packageName = module.context.match(
-        //       /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-        //     )[1]
-        //     // npm package names are URL-safe, but some servers don't like @ symbols
-        //     return `npm.${packageName.replace('@', '')}`
-        //   }
-        // }
       }
     }
   }
