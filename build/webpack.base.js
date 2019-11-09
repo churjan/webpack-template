@@ -27,7 +27,7 @@ for (let item of htmlArr) {
         chunks: ['vendor', 'common', name],
         title: name,
         filename: `${item}`,
-        hash: true
+        hash: true,
       })
     )
   }
@@ -38,24 +38,33 @@ module.exports = {
     alias: {
       //解析路径
       '@': resolve('src'),
-      '@static': resolve('static')
+      '@static': resolve('static'),
     },
-    extensions: ['.js', '.json', '.css']
+    extensions: ['.js', '.vue', '.html', '.json', '.scss', '.css'],
+    // 使用绝对路径指明第三方模块存放的位置，以减少搜索步骤
+    modules: [resolve('node_modules')],
   },
   entry: {
-    ...entrys
+    ...entrys,
   },
   output: {
     path: resolve('dist'), //输出的文件夹，只能是绝对路径
+    publicPath: devMode ? './' : '/dist/',
     //name是entry名字main,hash根据打包后的文件内容计算出来的hash,默认20位，这里取8位
     // filename:'[name].[hash:8].js'//打包后的文件名
-    filename: devMode ? 'js/[name].js' : 'js/[name].[hash:8].js'
-  },
-  resolveLoader: {
-    modules: ['node_modules', 'loaders']
+    filename: devMode ? 'js/[name].js' : 'js/[name].[hash:8].js',
   },
   module: {
     rules: [
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':src', ':data-src'],
+          },
+        },
+      },
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
@@ -67,14 +76,7 @@ module.exports = {
           //     name: 'Churjan'
           //   }
           // },
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-transform-runtime']
-            }
-          }
-        ]
+        ],
       },
       {
         //css-loader 用来解析css文件的url解析
@@ -86,13 +88,13 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: process.env.NODE_ENV === 'development',
-              publicPath: '../'
-            }
+              publicPath: '../',
+            },
           },
           'css-loader',
           'postcss-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       // {
       //   test: require.resolve('jquery'),
@@ -114,25 +116,25 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 5 * 1024,
-              outputPath: 'images/'
-            }
-          }
-        ]
+              outputPath: 'images/',
+            },
+          },
+        ],
       },
       {
         test: /\.(eot|ttf|woff|svg)$/,
-        use: 'file-loader'
-      }
-    ]
+        use: 'file-loader',
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
-      chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css'
+      chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
-      _: 'lodash'
+      _: 'lodash',
     }),
     new CleanWebpackPlugin(),
     //此插件可以自动产出HTML文件
@@ -141,12 +143,11 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: resolve('static'),
-        to: 'static'
-      }
-    ])
+        to: 'static',
+      },
+    ]),
   ],
   optimization: {
-    usedExports: true,
     //帮我们自动做代码分割
     splitChunks: {
       cacheGroups: {
@@ -158,7 +159,7 @@ module.exports = {
           minChunks: 1, //被不同entry引用次数(import),1次的话没必要提取
           maxInitialRequests: 5,
           minSize: 0,
-          priority: 100
+          priority: 100,
           // enforce: true?
         },
         common: {
@@ -169,9 +170,9 @@ module.exports = {
           minChunks: 2,
           maxInitialRequests: 5,
           minSize: 0,
-          priority: 1
-        }
-      }
-    }
-  }
+          priority: 1,
+        },
+      },
+    },
+  },
 }

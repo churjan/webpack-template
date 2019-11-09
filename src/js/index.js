@@ -1,5 +1,5 @@
 import '../scss/main.scss'
-$('#info').text(_.join([1, 2, 3], '***'))
+$('#info').text(_.join([1, 2, 3], '1222***'))
 
 // import axios from 'axios'
 // axios.defaults.baseURL = 'http://localhost:3000'
@@ -12,4 +12,3 @@ if (module.hot) {
   module.hot.accept(/* ... */)
   // ...
 }
-console.log('hello webpack')

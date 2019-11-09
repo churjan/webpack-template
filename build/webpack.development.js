@@ -5,7 +5,11 @@ const baseConfig = require('./webpack.base.js')
 
 const config = merge.smart(baseConfig, {
   mode: 'development',
-  plugins: [new webpack.HotModuleReplacementPlugin()],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    // 显示被替换模块的名称
+    new webpack.NamedModulesPlugin() // HMR shows correct file names
+  ],
   //静态服务器，可以预览打包后的项目
   devServer: {
     contentBase: './dist',
